@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "e35be335-381d-4d4e-a088-18cc06f2d108",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "树1春天": {
+      "ver": "1.0.3",
+      "uuid": "3b080570-ee7b-4cea-b63e-b891471e81f3",
+      "rawTextureUuid": "e35be335-381d-4d4e-a088-18cc06f2d108",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -5,
+      "offsetY": 20,
+      "trimX": 0,
+      "trimY": 211,
+      "width": 710,
+      "height": 818,
+      "rawWidth": 720,
+      "rawHeight": 1280,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

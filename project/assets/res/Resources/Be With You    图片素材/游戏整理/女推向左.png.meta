@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "f9dcc12a-ba1d-474d-82c7-f0eae1a41ba5",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "女推向左": {
+      "ver": "1.0.3",
+      "uuid": "d6759c1b-5105-49d9-a755-cc3d08e7a470",
+      "rawTextureUuid": "f9dcc12a-ba1d-474d-82c7-f0eae1a41ba5",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -1,
+      "offsetY": 2,
+      "trimX": 20,
+      "trimY": 0,
+      "width": 23,
+      "height": 61,
+      "rawWidth": 65,
+      "rawHeight": 65,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

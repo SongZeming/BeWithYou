@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "94dc3926-29d5-43d6-a0b1-5f712b4a3ed2",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "女走路": {
+      "ver": "1.0.3",
+      "uuid": "3895bb48-3a96-4d68-9528-c9780bdaa2d0",
+      "rawTextureUuid": "94dc3926-29d5-43d6-a0b1-5f712b4a3ed2",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 1,
+      "offsetY": 2,
+      "trimX": 22,
+      "trimY": 0,
+      "width": 23,
+      "height": 61,
+      "rawWidth": 65,
+      "rawHeight": 65,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

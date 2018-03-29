@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "dbc3dc52-703b-4d41-838d-21b7f8d2bdde",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "SevenBackground原": {
+      "ver": "1.0.3",
+      "uuid": "c473b4ea-bc01-49e6-8fe3-790565e6b263",
+      "rawTextureUuid": "dbc3dc52-703b-4d41-838d-21b7f8d2bdde",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1170,
+      "height": 780,
+      "rawWidth": 1170,
+      "rawHeight": 780,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

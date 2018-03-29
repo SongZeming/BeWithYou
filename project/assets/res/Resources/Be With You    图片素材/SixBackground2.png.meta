@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "04a4a473-c384-48d3-82da-4da86cf50b27",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "SixBackground2": {
+      "ver": "1.0.3",
+      "uuid": "3ed19d10-3e31-43ee-90d8-52fe888bed36",
+      "rawTextureUuid": "04a4a473-c384-48d3-82da-4da86cf50b27",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1170,
+      "height": 780,
+      "rawWidth": 1170,
+      "rawHeight": 780,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
