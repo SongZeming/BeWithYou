@@ -1,16 +1,30 @@
 let define = {};
 
 //------------- BeWithYou
-//男女角色不同关卡的位置
-define.BWY_RoundPosition = {
+//男女角色不同关卡的 /位置 /移动方向 /是否同时移动
+define.BWY_RoundInit = {
 	1: {
-		boy: cc.p(50, 495),
-		girl: cc.p(110, 245),
+		boy: {
+			pos: cc.p(80, 495),
+			dir: 1, //0-左 1-右
+		},
+		girl: {
+			pos: cc.p(110, 245),
+			dir: 0,
+		},
+		isTogetherMove: false,
 	},
 	2: {
-		boy: cc.p(50, 495),
-		girl: cc.p(110, 245),
-	}
+		boy: {
+			pos: cc.p(80, 495),
+			dir: 1,
+		},
+		girl: {
+			pos: cc.p(110, 245),
+			dir: 0,
+		},
+		isTogetherMove: false,
+	},
 }
 
 //有雪花的关卡 以及 雪量

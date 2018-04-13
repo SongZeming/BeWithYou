@@ -4,14 +4,22 @@ cc.Class({
     properties: {
         anim: cc.Animation,
     },
-    
-    setAnimtion(sex, flag) {
-        let name = sex + 'Anim';
+
+    init(sex, flag) {
+        this.name = sex + 'Anim';
         this.node.getChildByName(sex).active = true;
+    },
+    
+    setAnimtion(flag) {
         if (flag) {
-            this.anim.play(name);
+            if (!this._done) {
+                this._done = true;
+                this.anim.play(this.name);
+            } else {
+                this.anim.resume(this.name);
+            }
         } else {
-            this.anim.stop(name);
+            this.anim.pause(this.name);
         }
     },
 
