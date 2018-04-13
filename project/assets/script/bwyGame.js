@@ -8,6 +8,9 @@ cc.Class({
     properties: {
         back: cc.Node,
         characterPrefab: cc.Prefab,
+        jumpHight: 60,
+        jumpTime: 0.5,
+        missDistance: 36,
     },
 
     onLoad: function () {
@@ -21,6 +24,7 @@ cc.Class({
         this._moveSpeed = 2;
         this._curRoundInit = define.BWY_RoundInit[this._curLevel];
         this._curMoveOne = 'boy';
+        this._isUpdate = true;
     },
 
     start() {
@@ -36,32 +40,50 @@ cc.Class({
         this._isTogetherMove = this._curRoundInit.isTogetherMove;
         this.node.getChildByName('btnExchange').active = !this._isTogetherMove;
 
-        let bDir = this._curRoundInit.boy.dir;
-        let gDir = this._curRoundInit.girl.dir;
-        if (bDir === gDir) this._isSameDir = true;
-
         this.onMoveTouch();
         this.node.getChildByName('btnExchange').on('click', function () {
-            this._curMoveOne = this._curMoveOne === 'boy' ? 'girl' : 'boy';
+            this._curMoveOne = this.getTheOtherOne();
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
-            // if () { 着地才能跳第二次
-
-            // }
+            if (!this._isJumped) {
+                this._isJumped = true;
+                let action = cc.sequence(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1), cc.callFunc(function () {
+                    this._isJumped = false;
+                }.bind(this)));
+                this[this._curMoveOne].runAction(action);
+                if (this._isTogetherMove) {
+                    let body = this.getTheOtherOne();
+                    this[body].runAction(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1));
+                }
+            }
         }.bind(this));
     },
 
     update: function (dt) {
-        if (this.startMoveLfet) {
-            this.heroMove('left');
-        }
-        if (this.startMoveRight) {
-            this.heroMove('right');
+        if (this._isUpdate) {
+            if (this.startMoveLfet) {
+                this.heroMove('left');
+            } else if (this.startMoveRight) {
+                this.heroMove('right');
+            } else {
+                switch (this._curLevel) {
+                    case 1:
+                        this.first(true);
+                    case 2:
+                        this.second(true);
+                    default:
+                        break;
+                }
+            }
         }
     },
 
     heroMove(dir) {
         this._speed = dir === 'left' ? -this._moveSpeed : this._moveSpeed;
+        if (!this._isAnimPlaying) {
+            this._isAnimPlaying = true;
+            this[this._curMoveOne].getComponent('characterPrefab').setAnimtion(true);
+        }
         switch (this._curLevel) {
             case 1:
                 this.first();
@@ -72,18 +94,37 @@ cc.Class({
         }
     },
 
+    //------------------------------------------------------------------ 关卡,
     //第一关
-    first() {
-        if (!this._isAnimPlaying) {
-            this._isAnimPlaying = true;
-            this[this._curMoveOne].getComponent('characterPrefab').setAnimtion( true);
+    first(flag) {
+        let pos = this[this._curMoveOne].getPosition();
+        let downFunc = function () {
+            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490))
+                || (pos.y < 440 && pos.y > 55 && pos.x < 430 && pos.x > 305)) {
+                this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
+            }
+        }.bind(this);
+        let meetFunc = function () {
+            let otherPos = this[this.getTheOtherOne()].getPosition();
+            if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 5) {
+                this.pass();
+            }
+        }.bind(this);
+        if (flag) {
+            downFunc();
+            meetFunc();
+            return;
         }
-        if ((this[this._curMoveOne].getPositionX() < 1315 && this._speed > 0)
-            || (this[this._curMoveOne].getPositionX() > 19 && this._speed < 0)) {
+        if ((pos.x < 1315 && this._speed > 0)
+            || (pos.x > 19 && this._speed < 0)) {
             let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
-            let fh = this._speed > 0 ? (body.scaleX > 0 ? -1 : 1) : (body.scaleX > 0 ? 1 :-1);
-            body.scaleX = fh * body.scaleX;
-            this[this._curMoveOne].setPositionX(this[this._curMoveOne].getPositionX() + this._speed);
+            body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
+            downFunc();
+            meetFunc();
+            if (pos.y < 240 && ((pos.x < 310 && this._speed < 0) || (pos.x > 435 && this._speed > 0))) {
+                return;
+            }
+            this[this._curMoveOne].setPositionX(pos.x + this._speed);
         }
     },
     //第二关
@@ -99,6 +140,12 @@ cc.Class({
         this[sex].parent = this.back;
     },
 
+    getTheOtherOne() {
+        return this._curMoveOne === 'boy' ? 'girl' : 'boy';
+    },
+
+
+    //------------------------------------------------------------------ 触摸,
     onMoveTouch() {
         this.back.on('touchstart', this.startTouch, this);
         this.back.on('touchmove', this.moveTouch, this);
@@ -134,13 +181,16 @@ cc.Class({
         this[this._curMoveOne].getComponent('characterPrefab').setAnimtion(false);
     },
 
-
     pass() {
         this.snow.active = false;
+        this._isUpdate = false;
+        cc.log('--- pass ---');
     },
 
     death() {
         this.snow.active = false;
+        this._isUpdate = false;
+        cc.log('--- death ---');
     },
 
 });
