@@ -1,4 +1,5 @@
-const path = 'res/raw-assets/resources/sound/';
+const commonPath = 'res/raw-assets/resources/sound/';
+const bwyPath = 'res/raw-assets/resources/beWithYou/sound/';
 
 let data = {
     musicVolume: 0.8,
@@ -12,10 +13,11 @@ module.exports = {
         data.soundVolume = soundVolume;
     },
 
-    playMusic(name, loop) {
+    playMusic(gameType, name, loop) {
         let m_loop = loop ? true : false;
         let m_volume = this.getMusicVolume();
         this.stopMusic();
+        let path = gameType === 'beWithYou' ? bwyPath : commonPath;
         let musicPath = path + name;
         this._musicId = cc.audioEngine.play(musicPath, m_loop, m_volume);
     },
@@ -46,9 +48,10 @@ module.exports = {
     },
 
 
-    playSound(name, loop) {
+    playSound(gameType, name, loop) {
         let s_loop = loop ? true : false;
         let s_volume = this.getSoundVolume();
+        let path = gameType === 'beWithYou' ? bwyPath : commonPath;
         let soundPath = path + name;
         if (loop) {
             this._soundId = cc.audioEngine.play(soundPath, s_loop, s_volume);

@@ -1,3 +1,4 @@
+let audio = require('audio');
 const GameType = cc.Enum({
 	beWithYou: 0,
 });
@@ -24,6 +25,7 @@ cc.Class({
     },
 
     onBeWithYouFunc() {
+        audio.playMusic('beWithYou', 'mainBack.mp3', true);
     	this.node.getChildByName('btnStart').on('click', function() {
     		cc.director.loadScene('beWithYou');
     	}.bind(this));

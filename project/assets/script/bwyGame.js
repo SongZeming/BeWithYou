@@ -8,6 +8,8 @@ cc.Class({
     properties: {
         back: cc.Node,
         characterPrefab: cc.Prefab,
+        meetImg: cc.Node,
+        accountPrefab: cc.Prefab,
         jumpHight: 60,
         jumpTime: 0.5,
         missDistance: 36,
@@ -25,9 +27,11 @@ cc.Class({
         this._curRoundInit = define.BWY_RoundInit[this._curLevel];
         this._curMoveOne = 'boy';
         this._isUpdate = true;
+        this.meetImg.active = false;
     },
 
     start() {
+        audio.playMusic('beWithYou', 'gameBack.mp3', true);
         this.snow = this.back.getChildByName('snow');
         for (let lev in define.BWY_RoundSnow) {
             if (this._curLevel === parseInt(lev)) {
@@ -56,6 +60,9 @@ cc.Class({
                     this[body].runAction(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1));
                 }
             }
+        }.bind(this));
+        this.node.getChildByName('btnClose').on('click', function () {
+            this.account('close');
         }.bind(this));
     },
 
@@ -184,13 +191,43 @@ cc.Class({
     pass() {
         this.snow.active = false;
         this._isUpdate = false;
-        cc.log('--- pass ---');
+
+        this.meetImg.active = true;
+        let pos = this[this._curMoveOne].getPosition();
+        this.meetImg.setPosition(cc.p(pos.x, pos.y));
+        this.meetImg.setScale(0.2);
+        this.boy.active = false;
+        this.girl.active = false;
+        let action = cc.sequence(cc.scaleBy(1, 10), cc.fadeOut(1.0), cc.callFunc(function() {
+            this.account('success');
+        }.bind(this)));
+        this.meetImg.runAction(action);
     },
 
     death() {
         this.snow.active = false;
         this._isUpdate = false;
-        cc.log('--- death ---');
+
+        this.account('failed');
+    },
+
+    account(type) {
+        let account = cc.instantiate(this.accountPrefab);
+        account.parent = this.node;
+        account.getComponent('accountPrefab').init(type, this);
+    },
+
+    reStart() {
+        this.initData();
+        this.boy.setPosition(this._curRoundInit.boy.pos);
+        this.girl.setPosition(this._curRoundInit.girl.pos);
+    },
+
+    goNext() {
+        this._curLevel++;
+        this.initData();
+        this.boy.setPosition(this._curRoundInit.boy.pos);
+        this.girl.setPosition(this._curRoundInit.girl.pos);
     },
 
 });
