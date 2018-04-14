@@ -583,7 +583,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 182.32,
+      "width": 152.54,
       "height": 40
     },
     "_rotationX": 0,
@@ -615,8 +615,10 @@
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": true,
-    "_N$file": null,
-    "_isSystemFontUsed": true,
+    "_N$file": {
+      "__uuid__": "cbe769b3-765b-4c2e-966e-3b92caad663b"
+    },
+    "_isSystemFontUsed": false,
     "_spacingX": 0,
     "_N$string": "Exchange Character",
     "_N$horizontalAlign": 1,
@@ -657,7 +659,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 48.91,
+      "width": 39.96,
       "height": 40
     },
     "_rotationX": 0,
@@ -689,8 +691,10 @@
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": true,
-    "_N$file": null,
-    "_isSystemFontUsed": true,
+    "_N$file": {
+      "__uuid__": "cbe769b3-765b-4c2e-966e-3b92caad663b"
+    },
+    "_isSystemFontUsed": false,
     "_spacingX": 0,
     "_N$string": "Jump",
     "_N$horizontalAlign": 1,
@@ -1406,6 +1410,7 @@
     "back": {
       "__id__": 3
     },
+    "backImg": null,
     "characterPrefab": {
       "__uuid__": "16bfcb54-7680-480f-854c-a53fde596527"
     },

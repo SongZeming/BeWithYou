@@ -7,6 +7,7 @@ cc.Class({
 
     properties: {
         back: cc.Node,
+        backImg: cc.Sprite,
         characterPrefab: cc.Prefab,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
@@ -28,6 +29,8 @@ cc.Class({
         this._curMoveOne = 'boy';
         this._isUpdate = true;
         this.meetImg.active = false;
+        // let backImgName = 
+
     },
 
     start() {
