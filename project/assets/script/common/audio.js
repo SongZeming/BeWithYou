@@ -1,9 +1,10 @@
 const commonPath = 'res/raw-assets/resources/sound/';
 const bwyPath = 'res/raw-assets/resources/beWithYou/sound/';
+let utils = require('utils');
 
 let data = {
-    musicVolume: 0.8,
-    soundVolume: 0.8,
+    musicVolume: 1,
+    soundVolume: 1,
 }
 
 module.exports = {
@@ -44,7 +45,8 @@ module.exports = {
     },
 
     getMusicVolume() {
-        return data.musicVolume;
+        let volume = utils.getLocalStorage('musicVolume');
+        return volume ? volume : (volume === 0 ? 0 : data.musicVolume);
     },
 
 
@@ -53,11 +55,8 @@ module.exports = {
         let s_volume = this.getSoundVolume();
         let path = gameType === 'beWithYou' ? bwyPath : commonPath;
         let soundPath = path + name;
-        if (loop) {
-            this._soundId = cc.audioEngine.play(soundPath, s_loop, s_volume);
-        } else {
-            cc.audioEngine.play(soundPath, s_loop, s_volume);
-        }
+        this._soundId = cc.audioEngine.play(soundPath, s_loop, s_volume);
+
     },
 
     stopSound() {
@@ -67,11 +66,15 @@ module.exports = {
     setSoundVolume(volume) {
         if (volume >= 0 && volume <= 1) {
             data.soundVolume = volume;
+            if (this._soundId || this._soundId === 0) {
+                cc.audioEngine.setVolume(this._soundId, volume);
+            }
         }
     },
 
     getSoundVolume() {
-        return data.soundVolume;
+        let volume = utils.getLocalStorage('soundVolume');
+        return volume ? volume : (volume === 0 ? 0 : data.soundVolume);
     },
 
 

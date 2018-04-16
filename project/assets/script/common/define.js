@@ -13,6 +13,7 @@ define.BWY_RoundInit = {
 			dir: 0,
 		},
 		isTogetherMove: false,
+		round: 'FIRST ROUND',
 	},
 	2: {
 		boy: {
@@ -20,10 +21,11 @@ define.BWY_RoundInit = {
 			dir: 1,
 		},
 		girl: {
-			pos: cc.p(110, 245),
+			pos: cc.p(192, 60),
 			dir: 0,
 		},
 		isTogetherMove: false,
+		round: 'SECOND ROUND',
 	},
 }
 

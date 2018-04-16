@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "66646215-a0c2-416d-9c2f-0379c2299a6f",
+  "uuid": "63a08b4d-3529-483c-9aba-9299a9956acc",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "choose": {
+    "gamebg1": {
       "ver": "1.0.3",
-      "uuid": "e0c7cd2e-e74f-4702-b964-6f91bd6805c3",
-      "rawTextureUuid": "66646215-a0c2-416d-9c2f-0379c2299a6f",
+      "uuid": "a447b2dd-edb6-4677-a5dc-6edcf5a42124",
+      "rawTextureUuid": "63a08b4d-3529-483c-9aba-9299a9956acc",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

@@ -1,3 +1,4 @@
+let audio = require('audio');
 cc.Class({
     extends: cc.Component,
 
@@ -10,16 +11,22 @@ cc.Class({
 
     onLoad () {
     	this.node.getChildByName('btnReturn').on('click', function() {
+			audio.playSound('common', 'sound_anniu.mp3');
     		cc.director.loadScene('bwyMain');
     	});
     	this.node.getChildByName('btnAgain').on('click', function() {
+			audio.playSound('common', 'sound_anniu.mp3');
 			this.node.destroy();
     		this._context.reStart();
     	}.bind(this));
 		this.btnNext.on('click', function() {
+			audio.playSound('common', 'sound_anniu.mp3');
 			this.node.destroy();
     		this._context.goNext();
-    	}.bind(this));
+		}.bind(this));
+		this.node.getChildByName('hitzone').on('click', function() {
+			this.node.destroy();
+		}.bind(this));
     },
 
     init(type, context) {

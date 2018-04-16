@@ -10,11 +10,23 @@ let utils = {
     	cc.sys.localStorage.setItem(name, JSON.stringify(data));
     },
 
-    gettLocalStorage(name) {
+    getLocalStorage(name) {
     	return JSON.parse(cc.sys.localStorage.getItem(name));
     },
     
-    
+    scaleAnimtion(type, node, callback) {
+        if (type === 'in') {
+            node.setScale(0.5);
+            let action = cc.scaleTo(0.2, 1);
+            node.runAction(action);
+        } else if (type === 'out') {
+            let action = cc.sequence(cc.scaleTo(0.2, 0), cc.callFunc(function() {
+                callback();
+            }.bind(this)));
+            node.runAction(action);
+        }
+    },
+
 };
 
 module.exports = utils;

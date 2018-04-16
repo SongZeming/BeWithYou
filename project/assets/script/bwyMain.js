@@ -11,7 +11,9 @@ cc.Class({
             type: GameType,
             default: GameType.beWithYou,
             displayName: '游戏类型',
-        }
+        },
+        choosePrefab: cc.Prefab,
+        setPrefab: cc.Prefab,
     },
 
     onLoad: function () {
@@ -27,13 +29,12 @@ cc.Class({
     onBeWithYouFunc() {
         audio.playMusic('beWithYou', 'mainBack.mp3', true);
     	this.node.getChildByName('btnStart').on('click', function() {
-    		cc.director.loadScene('beWithYou');
+            audio.playSound('common', 'sound_anniu.mp3');
+            cc.instantiate(this.choosePrefab).parent = this.node;
     	}.bind(this));
         this.node.getChildByName('btnSet').on('click', function() {
-
-        }.bind(this));
-        this.node.getChildByName('btnAbout').on('click', function() {
-
+            audio.playSound('common', 'sound_anniu.mp3');
+            cc.instantiate(this.setPrefab).parent = this.node;
         }.bind(this));
         this.node.getChildByName('btnQuit').on('click', function() {
             cc.game.end();

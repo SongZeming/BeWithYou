@@ -7,7 +7,6 @@ cc.Class({
 
     properties: {
         back: cc.Node,
-        backImg: cc.Sprite,
         characterPrefab: cc.Prefab,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
@@ -17,7 +16,9 @@ cc.Class({
     },
 
     onLoad: function () {
-        this._curLevel = utils.gettLocalStorage('gameLevel') || 1;
+        utils.scaleAnimtion('in', this.node);
+        this._curLevel = utils.getLocalStorage('chooseLevel') || 1;
+        this.setBackground();
         this.initData();
         this.createCharacter('boy');
         this.createCharacter('girl');
@@ -29,8 +30,7 @@ cc.Class({
         this._curMoveOne = 'boy';
         this._isUpdate = true;
         this.meetImg.active = false;
-        // let backImgName = 
-
+        this.back.getChildByName('round').getComponent(cc.Label).string = this._curRoundInit.round;
     },
 
     start() {
@@ -49,13 +49,17 @@ cc.Class({
 
         this.onMoveTouch();
         this.node.getChildByName('btnExchange').on('click', function () {
+            audio.playSound('common', 'sound_anniu.mp3');
             this._curMoveOne = this.getTheOtherOne();
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
+            audio.playSound('common', 'sound_anniu.mp3');
             if (!this._isJumped) {
+                this._isJumping = true;
                 this._isJumped = true;
                 let action = cc.sequence(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1), cc.callFunc(function () {
                     this._isJumped = false;
+                    this._isJumping = false;
                 }.bind(this)));
                 this[this._curMoveOne].runAction(action);
                 if (this._isTogetherMove) {
@@ -65,6 +69,7 @@ cc.Class({
             }
         }.bind(this));
         this.node.getChildByName('btnClose').on('click', function () {
+            audio.playSound('common', 'sound_anniu.mp3');
             this.account('close');
         }.bind(this));
     },
@@ -79,8 +84,10 @@ cc.Class({
                 switch (this._curLevel) {
                     case 1:
                         this.first(true);
+                        break;
                     case 2:
                         this.second(true);
+                        break;
                     default:
                         break;
                 }
@@ -92,13 +99,15 @@ cc.Class({
         this._speed = dir === 'left' ? -this._moveSpeed : this._moveSpeed;
         if (!this._isAnimPlaying) {
             this._isAnimPlaying = true;
-            this[this._curMoveOne].getComponent('characterPrefab').setAnimtion(true);
+            this[this._curMoveOne].getComponent('bwyCharacterPrefab').setAnimtion(true);
         }
         switch (this._curLevel) {
             case 1:
                 this.first();
+                break;
             case 2:
                 this.second();
+                break;
             default:
                 break;
         }
@@ -109,20 +118,14 @@ cc.Class({
     first(flag) {
         let pos = this[this._curMoveOne].getPosition();
         let downFunc = function () {
-            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490))
-                || (pos.y < 440 && pos.y > 55 && pos.x < 430 && pos.x > 305)) {
+            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490) && !this._isJumping)
+                || (pos.y < 440 && pos.y > 60 && pos.x < 430 && pos.x > 305 && !this._isJumping)) {
                 this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
-            }
-        }.bind(this);
-        let meetFunc = function () {
-            let otherPos = this[this.getTheOtherOne()].getPosition();
-            if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 5) {
-                this.pass();
             }
         }.bind(this);
         if (flag) {
             downFunc();
-            meetFunc();
+            this.meet(pos);
             return;
         }
         if ((pos.x < 1315 && this._speed > 0)
@@ -130,7 +133,7 @@ cc.Class({
             let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
             body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
             downFunc();
-            meetFunc();
+            this.meet(pos);
             if (pos.y < 240 && ((pos.x < 310 && this._speed < 0) || (pos.x > 435 && this._speed > 0))) {
                 return;
             }
@@ -138,15 +141,38 @@ cc.Class({
         }
     },
     //第二关
-    second() {
-
+    second(flag) {
+        let pos = this[this._curMoveOne].getPosition();
+        let downFunc = function () {
+            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490))
+                || (pos.y < 440 && pos.y > 55 && pos.x < 430)) {
+                this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
+            }
+        }.bind(this);
+        if (flag) {
+            downFunc();
+            this.meet(pos);
+            return;
+        }
+        if ((((pos.x < 510 && pos.y > 490) || (pos.x >= 510 && pos.y > 550 && pos.x <= 600)
+            || (pos.x > 600 && pos.x < 1315)) && this._speed > 0)
+            || (pos.x > 19 && this._speed < 0)) {
+            let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
+            body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
+            downFunc();
+            this.meet(pos);
+            if (pos.y < 240 && ((pos.x < 310 && this._speed < 0) || (pos.x > 435 && this._speed > 0))) {
+                return;
+            }
+            this[this._curMoveOne].setPositionX(pos.x + this._speed);
+        }
     },
 
     //初始化男女角色
     createCharacter(sex, pos) {
         this[sex] = cc.instantiate(this.characterPrefab);
         this[sex].setPosition(this._curRoundInit[sex].pos);
-        this[sex].getComponent('characterPrefab').init(sex, false);
+        this[sex].getComponent('bwyCharacterPrefab').init(sex, false);
         this[sex].parent = this.back;
     },
 
@@ -154,6 +180,12 @@ cc.Class({
         return this._curMoveOne === 'boy' ? 'girl' : 'boy';
     },
 
+    meet(pos) {
+        let otherPos = this[this.getTheOtherOne()].getPosition();
+        if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 5) {
+            this.pass();
+        }
+    },
 
     //------------------------------------------------------------------ 触摸,
     onMoveTouch() {
@@ -188,12 +220,13 @@ cc.Class({
         this.startMoveLfet = false;
         this.startMoveRight = false;
         this._isAnimPlaying = false;
-        this[this._curMoveOne].getComponent('characterPrefab').setAnimtion(false);
+        this[this._curMoveOne].getComponent('bwyCharacterPrefab').setAnimtion(false);
     },
 
     pass() {
         this.snow.active = false;
         this._isUpdate = false;
+        utils.setLocalStorage('gameLevel', this._curLevel + 1);
 
         this.meetImg.active = true;
         let pos = this[this._curMoveOne].getPosition();
@@ -217,7 +250,7 @@ cc.Class({
     account(type) {
         let account = cc.instantiate(this.accountPrefab);
         account.parent = this.node;
-        account.getComponent('accountPrefab').init(type, this);
+        account.getComponent('bwyAccountPrefab').init(type, this);
     },
 
     reStart() {
@@ -228,9 +261,21 @@ cc.Class({
 
     goNext() {
         this._curLevel++;
+        this.setBackground();
         this.initData();
         this.boy.setPosition(this._curRoundInit.boy.pos);
         this.girl.setPosition(this._curRoundInit.girl.pos);
+    },
+
+    setBackground() {
+        let backName = 'beWithYou/texture/background/gamebg' + (this._curLevel - 1);
+        cc.loader.loadRes(backName, cc.SpriteFrame, function (err, spriteFrame) {
+            if (err) {
+                cc.error(err.message || err);
+                return;
+            }
+            this.back.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+        }.bind(this));
     },
 
 });
