@@ -8,17 +8,42 @@
   },
   "collision-matrix": [
     [
-      true
-    ],
-    [
-      false,
-      true,
-      true
-    ],
-    [
-      false,
-      true,
       false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
     ]
   ],
   "design-resolution-height": 750,
@@ -28,8 +53,11 @@
   "fit-width": true,
   "group-list": [
     "default",
-    "charactor",
-    "rect"
+    "Actor",
+    "Rect",
+    "Box",
+    "Platform",
+    "Collider"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {

@@ -21,11 +21,7 @@ cc.Class({
         this.setBackground();
         this.initData();
         this.createCharacter('boy');
-        this.createCharacter('girl');
-
-        var manager = cc.director.getCollisionManager();
-        manager.enabled = true;
-        manager.enabledDebugDraw = true;
+        // this.createCharacter('girl');
     },
 
     initData() {
@@ -76,24 +72,24 @@ cc.Class({
     },
 
     update: function (dt) {
-        if (this._isUpdate) {
-            if (this.startMoveLfet) {
-                this.heroMove('left');
-            } else if (this.startMoveRight) {
-                this.heroMove('right');
-            } else {
-                switch (this._curLevel) {
-                    case 1:
-                        this.first(true);
-                        break;
-                    case 2:
-                        this.second(true);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        // if (this._isUpdate) {
+        //     if (this.startMoveLfet) {
+        //         this.heroMove('left');
+        //     } else if (this.startMoveRight) {
+        //         this.heroMove('right');
+        //     } else {
+        //         switch (this._curLevel) {
+        //             case 1:
+        //                 this.first(true);
+        //                 break;
+        //             case 2:
+        //                 this.second(true);
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //     }
+        // }
     },
 
     heroMove(dir) {
@@ -143,34 +139,7 @@ cc.Class({
     },
     //第二关
     second(flag) {
-        let pos = this[this._curMoveOne].getPosition();
-        let downFunc = function () {
-            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490))
-                || (pos.y < 440 && pos.y > 55 && pos.x < 440)) {
-                this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
-            }
-        }.bind(this);
-        if (flag) {
-            downFunc();
-            this.meet(pos);
-            return;
-        }
-        if (pos.x >= 510 && pos.x < 600 && pos.y > 550) {
-            this[this._curMoveOne].setPositionY(550);
-        }
-        if ((((pos.x < 510 && pos.y > 495 && pos.y < 510 ) 
-            || (pos.x >= 510 && pos.y >= 550 && pos.x < 600)
-            || (pos.x >= 600 && pos.x < 1120)) && this._speed > 0)
-            || (pos.x > 19 && this._speed < 0)) {
-            let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
-            body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
-            downFunc();
-            this.meet(pos);
-            if (pos.y < 240 && ((pos.x < 310 && this._speed < 0) || (pos.x > 435 && this._speed > 0))) {
-                return;
-            }
-            this[this._curMoveOne].setPositionX(pos.x + this._speed);
-        }
+        
     },
 
     //初始化男女角色
@@ -191,21 +160,6 @@ cc.Class({
             this.pass();
         }
     },
-
-    setAnimtion(flag) {
-        let name = this._curMoveOne + 'Anim';
-        if (flag) {
-            if (!this._done) {
-                this._done = true;
-                this[name].play(name);
-            } else {
-                this[name].resume(name);
-            }
-        } else {
-            this[name].pause(name);
-        }
-    },
-
 
     //------------------------------------------------------------------ 触摸,
     onMoveTouch() {
