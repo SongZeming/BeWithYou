@@ -1,7 +1,7 @@
 let define = {};
 
 //------------- BeWithYou
-//男女角色不同关卡的 /位置 /移动方向 /是否同时移动
+//男女角色不同关卡的 /位置 /移动方向 /是否同时移动 /关卡 /是否下雪
 define.BWY_RoundInit = {
 	1: {
 		boy: {
@@ -14,28 +14,22 @@ define.BWY_RoundInit = {
 		},
 		isTogetherMove: false,
 		round: 'FIRST ROUND',
+		snow: 40,
 	},
 	2: {
 		boy: {
-			pos: cc.p(80, 495),
+			pos: cc.p(80, 500),
 			dir: 1,
 		},
 		girl: {
-			pos: cc.p(192, 60),
+			pos: cc.p(192, 55),
 			dir: 0,
 		},
 		isTogetherMove: false,
 		round: 'SECOND ROUND',
+		snow: false,
 	},
 }
-
-//有雪花的关卡 以及 雪量
-define.BWY_RoundSnow = {
-	1: 30,
-	2: 50,
-	3: 70,
-};
-
 
 
 //------------- Else

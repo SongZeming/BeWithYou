@@ -10,7 +10,7 @@ cc.Class({
         characterPrefab: cc.Prefab,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
-        jumpHight: 60,
+        jumpHight: 80,
         jumpTime: 0.5,
         missDistance: 36,
     },
@@ -22,6 +22,10 @@ cc.Class({
         this.initData();
         this.createCharacter('boy');
         this.createCharacter('girl');
+
+        var manager = cc.director.getCollisionManager();
+        manager.enabled = true;
+        manager.enabledDebugDraw = true;
     },
 
     initData() {
@@ -31,18 +35,15 @@ cc.Class({
         this._isUpdate = true;
         this.meetImg.active = false;
         this.back.getChildByName('round').getComponent(cc.Label).string = this._curRoundInit.round;
+        if (this._curRoundInit.snow) {
+            this.snow = this.back.getChildByName('snow');
+            this.snow.active = true;
+            this.snow.getComponent(cc.ParticleSystem).emissionRate = this._curRoundInit.snow;
+        }
     },
 
     start() {
         audio.playMusic('beWithYou', 'gameBack.mp3', true);
-        this.snow = this.back.getChildByName('snow');
-        for (let lev in define.BWY_RoundSnow) {
-            if (this._curLevel === parseInt(lev)) {
-                this.snow.active = true;
-                this.snow.getComponent(cc.ParticleSystem).emissionRate = define.BWY_RoundSnow[lev];
-                break;
-            }
-        }
         this.back.getChildByName('tishi').active = this._curLevel === 1 ? true : false;
         this._isTogetherMove = this._curRoundInit.isTogetherMove;
         this.node.getChildByName('btnExchange').active = !this._isTogetherMove;
@@ -145,7 +146,7 @@ cc.Class({
         let pos = this[this._curMoveOne].getPosition();
         let downFunc = function () {
             if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490))
-                || (pos.y < 440 && pos.y > 55 && pos.x < 430)) {
+                || (pos.y < 440 && pos.y > 55 && pos.x < 440)) {
                 this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
             }
         }.bind(this);
@@ -154,8 +155,12 @@ cc.Class({
             this.meet(pos);
             return;
         }
-        if ((((pos.x < 510 && pos.y > 490) || (pos.x >= 510 && pos.y > 550 && pos.x <= 600)
-            || (pos.x > 600 && pos.x < 1315)) && this._speed > 0)
+        if (pos.x >= 510 && pos.x < 600 && pos.y > 550) {
+            this[this._curMoveOne].setPositionY(550);
+        }
+        if ((((pos.x < 510 && pos.y > 495 && pos.y < 510 ) 
+            || (pos.x >= 510 && pos.y >= 550 && pos.x < 600)
+            || (pos.x >= 600 && pos.x < 1120)) && this._speed > 0)
             || (pos.x > 19 && this._speed < 0)) {
             let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
             body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
@@ -186,6 +191,21 @@ cc.Class({
             this.pass();
         }
     },
+
+    setAnimtion(flag) {
+        let name = this._curMoveOne + 'Anim';
+        if (flag) {
+            if (!this._done) {
+                this._done = true;
+                this[name].play(name);
+            } else {
+                this[name].resume(name);
+            }
+        } else {
+            this[name].pause(name);
+        }
+    },
+
 
     //------------------------------------------------------------------ 触摸,
     onMoveTouch() {
