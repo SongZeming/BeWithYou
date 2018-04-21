@@ -5,12 +5,12 @@ let define = {};
 define.BWY_RoundInit = {
 	1: {
 		boy: {
-			pos: cc.p(80, 550),
-			dir: 1, //0-左 1-右
+			pos: cc.p(70, 520),
+			dir: -1, //-1-左 1-右
 		},
 		girl: {
-			pos: cc.p(110, 245),
-			dir: 0,
+			pos: cc.p(80, 260),
+			dir: -1,
 		},
 		isTogetherMove: false,
 		round: 'FIRST ROUND',
@@ -18,12 +18,12 @@ define.BWY_RoundInit = {
 	},
 	2: {
 		boy: {
-			pos: cc.p(80, 500),
-			dir: 1,
+			pos: cc.p(80, 580),
+			dir: -1,
 		},
 		girl: {
-			pos: cc.p(192, 55),
-			dir: 0,
+			pos: cc.p(192, 80),
+			dir: -1,
 		},
 		isTogetherMove: false,
 		round: 'SECOND ROUND',

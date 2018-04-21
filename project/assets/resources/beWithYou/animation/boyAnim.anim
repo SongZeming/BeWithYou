@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "boyAnim",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.0166666666666666,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "adfe1330-37c7-43a3-8091-cd44e056fd8b"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "7e48a79e-8380-48af-8708-dc7ec42b9063"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "adfe1330-37c7-43a3-8091-cd44e056fd8b"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "60f4176f-bfe8-48cc-9546-443f3ee0746d"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "adfe1330-37c7-43a3-8091-cd44e056fd8b"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

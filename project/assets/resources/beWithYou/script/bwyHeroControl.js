@@ -1,18 +1,21 @@
+let event = require('event');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        speed: cc.v2(0, 0),
-        maxSpeed: cc.v2(400, 600),
-        gravity: -1000, //重力
-        drag: 1000, //拖曳
-        direction: 0,
-        jumpSpeed: 300
+        
     },
 
     // use this for initialization
     onLoad: function () {
+        this.speed = cc.v2(0, 0);
+        this.maxSpeed = cc.v2(200, 400);
+        this.gravity = -1000; //重力
+        this.drag = 300; //拖曳
+        this.direction = 0;
+        this.jumpSpeed = 400;
+
         //add keyboard input listener to call turnLeft and turnRight
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
@@ -29,14 +32,25 @@ cc.Class({
         this.touchingNumber = 0;
     },
 
+    setDirection: function (dir) {
+        this.direction = dir;
+    },
+
+    setIsJumping: function (isJumping) {
+        if (isJumping) {
+            this.speed.y = this.jumpSpeed;
+        }
+        this.jumping = isJumping;
+    },
+
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
     onDisable: function () {
         cc.director.getCollisionManager().enabled = false;
-        cc.director.getCollisionManager().enabledDebugDraw = false;
+        // cc.director.getCollisionManager().enabledDebugDraw = false;
     },
     
     onKeyPressed: function (keyCode, event) {
@@ -109,6 +123,7 @@ cc.Class({
             if (this.speed.y < 0 && (selfPreAabb.yMax > otherPreAabb.yMax)) {
                 this.node.y = otherPreAabb.yMax - this.node.parent.y;
                 this.jumping = false;
+                event.dispatch('HeroIsJumping', false);
                 this.collisionY = -1;
             }
             else if (this.speed.y > 0 && (selfPreAabb.yMin < otherPreAabb.yMin)) {
@@ -167,7 +182,6 @@ cc.Class({
                 this.speed.y = this.speed.y > 0 ? this.maxSpeed.y : -this.maxSpeed.y;
             }
         }
-
         if (this.direction === 0) {
             if (this.speed.x > 0) {
                 this.speed.x -= this.drag * dt;
@@ -179,6 +193,7 @@ cc.Class({
             }
         }
         else {
+            this.node.scaleX = this.direction > 0 ? -1 : 1;
             this.speed.x += (this.direction > 0 ? 1 : -1) * this.drag * dt;
             if (Math.abs(this.speed.x) > this.maxSpeed.x) {
                 this.speed.x = this.speed.x > 0 ? this.maxSpeed.x : -this.maxSpeed.x;

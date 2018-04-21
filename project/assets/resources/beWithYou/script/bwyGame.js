@@ -1,17 +1,17 @@
 let define = require('define');
 let audio = require('audio');
 let utils = require('utils');
+let event = require('event');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
         back: cc.Node,
-        characterPrefab: cc.Prefab,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
-        jumpHight: 80,
-        jumpTime: 0.5,
+        boy: cc.Node,
+        girl: cc.Node,
         missDistance: 36,
     },
 
@@ -20,8 +20,14 @@ cc.Class({
         this._curLevel = utils.getLocalStorage('chooseLevel') || 1;
         this.setBackground();
         this.initData();
-        this.createCharacter('boy');
-        // this.createCharacter('girl');
+        event.add('BwyGameIsJumping', 'HeroIsJumping', function(jump) {
+            cc.log('--- HeroIsJumping: ', jump);
+            this._isJumped = jump;
+        }.bind(this));
+    },
+
+    onDestroy() {
+        event.remove('BwyGameIsJumping');
     },
 
     initData() {
@@ -30,6 +36,8 @@ cc.Class({
         this._curMoveOne = 'boy';
         this._isUpdate = true;
         this.meetImg.active = false;
+        this.boy.scaleX = this._curRoundInit.boy.dir;
+        this.girl.scaleX = this._curRoundInit.boy.dir;
         this.back.getChildByName('round').getComponent(cc.Label).string = this._curRoundInit.round;
         if (this._curRoundInit.snow) {
             this.snow = this.back.getChildByName('snow');
@@ -51,17 +59,13 @@ cc.Class({
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
+            cc.log('--- this._isJumped: ', this._isJumped);
             if (!this._isJumped) {
-                this._isJumping = true;
                 this._isJumped = true;
-                let action = cc.sequence(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1), cc.callFunc(function () {
-                    this._isJumped = false;
-                    this._isJumping = false;
-                }.bind(this)));
-                this[this._curMoveOne].runAction(action);
+                this[this._curMoveOne].getComponent('bwyHeroControl').setIsJumping(true);
                 if (this._isTogetherMove) {
                     let body = this.getTheOtherOne();
-                    this[body].runAction(cc.jumpBy(this.jumpTime, cc.p(0, 0), this.jumpHight, 1));
+                    this[body].getComponent('bwyHeroControl').setIsJumping(true);
                 }
             }
         }.bind(this));
@@ -72,86 +76,37 @@ cc.Class({
     },
 
     update: function (dt) {
-        // if (this._isUpdate) {
-        //     if (this.startMoveLfet) {
-        //         this.heroMove('left');
-        //     } else if (this.startMoveRight) {
-        //         this.heroMove('right');
-        //     } else {
-        //         switch (this._curLevel) {
-        //             case 1:
-        //                 this.first(true);
-        //                 break;
-        //             case 2:
-        //                 this.second(true);
-        //                 break;
-        //             default:
-        //                 break;
-        //         }
-        //     }
-        // }
+        if (this._isUpdate) {
+            if (this.startMoveLfet) {
+                this.heroMove('left');
+            } else if (this.startMoveRight) {
+                this.heroMove('right');
+            }
+        }
     },
 
     heroMove(dir) {
         this._speed = dir === 'left' ? -this._moveSpeed : this._moveSpeed;
         if (!this._isAnimPlaying) {
             this._isAnimPlaying = true;
-            this[this._curMoveOne].getComponent('bwyCharacterPrefab').setAnimtion(true);
+            this.setAnimtion(this._curMoveOne, true);
         }
-        switch (this._curLevel) {
-            case 1:
-                this.first();
-                break;
-            case 2:
-                this.second();
-                break;
-            default:
-                break;
-        }
-    },
-
-    //------------------------------------------------------------------ 关卡,
-    //第一关
-    first(flag) {
-        let pos = this[this._curMoveOne].getPosition();
-        let downFunc = function () {
-            if ((pos.y > 250 && (pos.x > 1120 || pos.y < 490) && !this._isJumping)
-                || (pos.y < 440 && pos.y > 60 && pos.x < 430 && pos.x > 305 && !this._isJumping)) {
-                this[this._curMoveOne].setPositionY(pos.y - Math.abs(this._speed) * 2);
-            }
-        }.bind(this);
-        if (flag) {
-            downFunc();
-            this.meet(pos);
-            return;
-        }
-        if ((pos.x < 1315 && this._speed > 0)
-            || (pos.x > 19 && this._speed < 0)) {
-            let body = this[this._curMoveOne].getChildByName(this._curMoveOne);
-            body.scaleX = this._speed > 0 ? (body.scaleX > 0 ? -body.scaleX : body.scaleX) : (body.scaleX > 0 ? body.scaleX : -body.scaleX);
-            downFunc();
-            this.meet(pos);
-            if (pos.y < 240 && ((pos.x < 310 && this._speed < 0) || (pos.x > 435 && this._speed > 0))) {
-                return;
-            }
-            this[this._curMoveOne].setPositionX(pos.x + this._speed);
-        }
-    },
-    //第二关
-    second(flag) {
-        
-    },
-
-    //初始化男女角色
-    createCharacter(sex, pos) {
-        this[sex] = cc.instantiate(this.characterPrefab);
-        this[sex].setPosition(this._curRoundInit[sex].pos);
-        this[sex].getComponent('bwyCharacterPrefab').init(sex, false);
-        this[sex].parent = this.back;
+        let body = this[this._curMoveOne];
+        let pos = body.getPosition();
+        body.getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 : -1);
+        this.meet(pos);
     },
 
     getTheOtherOne() {
         return this._curMoveOne === 'boy' ? 'girl' : 'boy';
+    },
+
+    setAnimtion(sex, flag) {
+        if (flag) {
+            this[sex].getComponent(cc.Animation).play();
+        } else {
+            this[sex].getComponent(cc.Animation).stop();
+        }
     },
 
     meet(pos) {
@@ -194,7 +149,8 @@ cc.Class({
         this.startMoveLfet = false;
         this.startMoveRight = false;
         this._isAnimPlaying = false;
-        this[this._curMoveOne].getComponent('bwyCharacterPrefab').setAnimtion(false);
+        this.setAnimtion(this._curMoveOne, false);
+        this[this._curMoveOne].getComponent('bwyHeroControl').setDirection(0);
     },
 
     pass() {
@@ -206,8 +162,6 @@ cc.Class({
         let pos = this[this._curMoveOne].getPosition();
         this.meetImg.setPosition(cc.p(pos.x, pos.y));
         this.meetImg.setScale(0.2);
-        this.boy.active = false;
-        this.girl.active = false;
         let action = cc.sequence(cc.scaleBy(1, 10), cc.fadeOut(1.0), cc.callFunc(function() {
             this.account('success');
         }.bind(this)));
