@@ -13,20 +13,13 @@
     [
       false,
       false,
-      false,
-      false,
-      true
-    ],
-    [
-      false,
-      false,
-      false,
+      true,
+      true,
       false
     ],
     [
       false,
-      false,
-      false,
+      true,
       false,
       false
     ],
@@ -42,8 +35,15 @@
       false,
       false,
       false,
-      false,
       true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
     ]
   ],
   "design-resolution-height": 750,
@@ -54,10 +54,10 @@
   "group-list": [
     "default",
     "Actor",
-    "Rect",
-    "Box",
     "Platform",
-    "Collider"
+    "Wall",
+    "Collider",
+    "Box"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {
