@@ -25,12 +25,15 @@ cc.Class({
     		this._context.goNext();
 		}.bind(this));
 		this.node.getChildByName('hitzone').on('click', function() {
-			this.node.destroy();
+			if (this._type === 'close') {
+				this.node.destroy();
+			}
 		}.bind(this));
     },
 
     init(type, context) {
-    	this._context = context;
+		this._context = context;
+		this._type = type;
     	switch(type) {
     		case 'success':
 				this.titleL.string = 'S U C C E S S';

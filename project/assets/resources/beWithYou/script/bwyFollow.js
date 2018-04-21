@@ -2,15 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        boy: {
-            default: null,
-            type: cc.Node
-        },
 
-        girl: {
-            default: null,
-            type: cc.Node
-        },
     },
 
     onLoad: function () {

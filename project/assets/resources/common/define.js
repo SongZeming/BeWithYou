@@ -5,7 +5,8 @@ let define = {};
 define.BWY_RoundInit = {
 	1: {
 		boy: {
-			pos: cc.p(70, 520),
+			// pos: cc.p(70, 520),
+			pos: cc.p(160, 260),
 			dir: -1, //-1-左 1-右
 		},
 		girl: {

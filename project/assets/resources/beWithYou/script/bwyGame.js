@@ -10,18 +10,17 @@ cc.Class({
         back: cc.Node,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
-        boy: cc.Node,
-        girl: cc.Node,
-        missDistance: 36,
+        boyPrefab: cc.Prefab,
+        girlPrefab: cc.Prefab,
+        rootN: cc.Node,
     },
 
-    onLoad: function () {
+    onLoad: function () {this.missDistance = 36;
         utils.scaleAnimtion('in', this.node);
         this._curLevel = utils.getLocalStorage('chooseLevel') || 1;
         this.setBackground();
         this.initData();
         event.add('BwyGameIsJumping', 'HeroIsJumping', function(jump) {
-            cc.log('--- HeroIsJumping: ', jump);
             this._isJumped = jump;
         }.bind(this));
     },
@@ -30,14 +29,28 @@ cc.Class({
         event.remove('BwyGameIsJumping');
     },
 
+    createHero() {
+        if (this.boy) this.boy.destroy();
+        if (this.girl) this.girl.destroy();
+        this.boy = cc.instantiate(this.boyPrefab);
+        this.boy.parent = this.rootN;
+        this.girl = cc.instantiate(this.girlPrefab);
+        this.girl.parent = this.rootN;
+    },
+
     initData() {
         this._moveSpeed = 2;
         this._curRoundInit = define.BWY_RoundInit[this._curLevel];
         this._curMoveOne = 'boy';
         this._isUpdate = true;
         this.meetImg.active = false;
+        this.createHero();
+        this.boy.getComponent('bwyHeroControl').setUpdate(true);
+        this.girl.getComponent('bwyHeroControl').setUpdate(true);
+        this.boy.setPosition(this._curRoundInit.boy.pos);
+        this.girl.setPosition(this._curRoundInit.girl.pos);
         this.boy.scaleX = this._curRoundInit.boy.dir;
-        this.girl.scaleX = this._curRoundInit.boy.dir;
+        this.girl.scaleX = this._curRoundInit.girl.dir;
         this.back.getChildByName('round').getComponent(cc.Label).string = this._curRoundInit.round;
         if (this._curRoundInit.snow) {
             this.snow = this.back.getChildByName('snow');
@@ -47,6 +60,7 @@ cc.Class({
     },
 
     start() {
+        this.missDistance = 36;
         audio.playMusic('beWithYou', 'gameBack.mp3', true);
         this.back.getChildByName('tishi').active = this._curLevel === 1 ? true : false;
         this._isTogetherMove = this._curRoundInit.isTogetherMove;
@@ -59,7 +73,6 @@ cc.Class({
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
-            cc.log('--- this._isJumped: ', this._isJumped);
             if (!this._isJumped) {
                 this._isJumped = true;
                 this[this._curMoveOne].getComponent('bwyHeroControl').setIsJumping(true);
@@ -102,16 +115,18 @@ cc.Class({
     },
 
     setAnimtion(sex, flag) {
+        if (!this[sex]) return;
+        let anim = this[sex].getComponent(cc.Animation);
         if (flag) {
-            this[sex].getComponent(cc.Animation).play();
+            anim.play();
         } else {
-            this[sex].getComponent(cc.Animation).stop();
+            anim.stop();
         }
     },
 
     meet(pos) {
         let otherPos = this[this.getTheOtherOne()].getPosition();
-        if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 5) {
+        if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 10) {
             this.pass();
         }
     },
@@ -154,13 +169,24 @@ cc.Class({
     },
 
     pass() {
-        this.snow.active = false;
+        if (this.snow) {
+            this.snow.active = false;
+        }
         this._isUpdate = false;
-        utils.setLocalStorage('gameLevel', this._curLevel + 1);
+        this.boy.getComponent('bwyHeroControl').setUpdate(false);
+        this.girl.getComponent('bwyHeroControl').setUpdate(false);
+        let lev = utils.getLocalStorage('gameLevel');
+        if (lev < this._curLevel + 1) {
+            utils.setLocalStorage('gameLevel', this._curLevel + 1);
+        }
 
+        let body = this[this._curMoveOne]
+        let pos = body.getPosition();
+        let dis = body.scaleX > 0 ? -1 : 1;
+        let con = body.getContentSize();
         this.meetImg.active = true;
-        let pos = this[this._curMoveOne].getPosition();
-        this.meetImg.setPosition(cc.p(pos.x, pos.y));
+        this.meetImg.opacity = 255;
+        this.meetImg.setPosition(cc.p(pos.x + dis * con.width / 2, pos.y + con.height/1.5));
         this.meetImg.setScale(0.2);
         let action = cc.sequence(cc.scaleBy(1, 10), cc.fadeOut(1.0), cc.callFunc(function() {
             this.account('success');

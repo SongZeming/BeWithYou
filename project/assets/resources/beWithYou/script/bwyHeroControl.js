@@ -43,6 +43,10 @@ cc.Class({
         this.jumping = isJumping;
     },
 
+    setUpdate: function (flag) {
+        this._isUpdate = flag;
+    },
+
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
         // cc.director.getCollisionManager().enabledDebugDraw = true;
@@ -176,6 +180,7 @@ cc.Class({
     },
     
     update: function (dt) {
+        if (!this._isUpdate) return;
         if (this.collisionY === 0) {
             this.speed.y += this.gravity * dt;
             if (Math.abs(this.speed.y) > this.maxSpeed.y) {
