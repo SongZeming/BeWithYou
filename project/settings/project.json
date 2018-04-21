@@ -15,7 +15,8 @@
       false,
       true,
       true,
-      false
+      false,
+      true
     ],
     [
       false,
@@ -39,7 +40,7 @@
     ],
     [
       false,
-      false,
+      true,
       false,
       false,
       false,
@@ -57,7 +58,7 @@
     "Platform",
     "Wall",
     "Collider",
-    "Box"
+    "Death"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {

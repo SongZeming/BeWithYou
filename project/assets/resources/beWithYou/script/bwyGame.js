@@ -8,6 +8,7 @@ cc.Class({
 
     properties: {
         back: cc.Node,
+        tipsManager: cc.Node,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
         boyPrefab: cc.Prefab,
@@ -23,10 +24,12 @@ cc.Class({
         event.add('BwyGameIsJumping', 'HeroIsJumping', function(jump) {
             this._isJumped = jump;
         }.bind(this));
+        event.add('BwyGameHeroDeath', 'bwyHeroDeath', this.death.bind(this));
     },
 
     onDestroy() {
         event.remove('BwyGameIsJumping');
+        event.remove('BwyGameHeroDeath');
     },
 
     createHero() {
@@ -57,6 +60,10 @@ cc.Class({
             this.snow.active = true;
             this.snow.getComponent(cc.ParticleSystem).emissionRate = this._curRoundInit.snow;
         }
+        for (let i = 0; i < utils.getLength(define.BWY_RoundInit); i++) {
+            this.rootN.getChildByName('platforms' + (i + 1)).active = false;
+        }
+        this.rootN.getChildByName('platforms' + this._curLevel).active = true;
     },
 
     start() {
@@ -84,7 +91,7 @@ cc.Class({
         }.bind(this));
         this.node.getChildByName('btnClose').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
-            this.account('close');
+            this.account('close', this.checkLevel('close'));
         }.bind(this));
     },
 
@@ -168,17 +175,42 @@ cc.Class({
         this[this._curMoveOne].getComponent('bwyHeroControl').setDirection(0);
     },
 
-    pass() {
-        if (this.snow) {
-            this.snow.active = false;
+    checkLevel(type) {
+        let saveLev = utils.getLocalStorage('gameLevel');
+        let totalLev = utils.getLength(define.BWY_RoundInit);
+        switch(type) {
+            case 'success':
+                if (totalLev > saveLev) return true;
+                else return false;
+                break;
+            case 'failed':
+                if (saveLev > this._curLevel) return true;
+                else return false;
+                break;
+            case 'close':
+                if (saveLev > this._curLevel) return true;
+                else return false;
+                break;
+            default:
+                if (saveLev <= this._curLevel && totalLev > this._curLevel) {
+                    utils.setLocalStorage('gameLevel', this._curLevel + 1);
+                }
+                break;
         }
+    },
+
+    setSnowActive(flag) {
+        if (this.snow) {
+            this.snow.active = flag;
+        }
+    },
+
+    pass() {
+        this.setSnowActive(false);
         this._isUpdate = false;
         this.boy.getComponent('bwyHeroControl').setUpdate(false);
         this.girl.getComponent('bwyHeroControl').setUpdate(false);
-        let lev = utils.getLocalStorage('gameLevel');
-        if (lev < this._curLevel + 1) {
-            utils.setLocalStorage('gameLevel', this._curLevel + 1);
-        }
+        this.checkLevel();
 
         let body = this[this._curMoveOne]
         let pos = body.getPosition();
@@ -189,22 +221,21 @@ cc.Class({
         this.meetImg.setPosition(cc.p(pos.x + dis * con.width / 2, pos.y + con.height/1.5));
         this.meetImg.setScale(0.2);
         let action = cc.sequence(cc.scaleBy(1, 10), cc.fadeOut(1.0), cc.callFunc(function() {
-            this.account('success');
+            this.account('success', this.checkLevel('success'));
         }.bind(this)));
         this.meetImg.runAction(action);
     },
 
     death() {
-        this.snow.active = false;
+        this.setSnowActive(false);
         this._isUpdate = false;
-
-        this.account('failed');
+        this.account('failed', this.checkLevel('failed'));
     },
 
-    account(type) {
+    account(type, flag) {
         let account = cc.instantiate(this.accountPrefab);
-        account.parent = this.node;
-        account.getComponent('bwyAccountPrefab').init(type, this);
+        account.parent = this.tipsManager;
+        account.getComponent('bwyAccountPrefab').init(type, flag, this);
     },
 
     reStart() {

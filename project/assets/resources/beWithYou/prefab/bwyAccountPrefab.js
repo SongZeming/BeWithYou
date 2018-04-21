@@ -31,27 +31,28 @@ cc.Class({
 		}.bind(this));
     },
 
-    init(type, context) {
+    init(type, flag, context) {
 		this._context = context;
 		this._type = type;
+		let opa = flag ? 255 : 100;
     	switch(type) {
     		case 'success':
 				this.titleL.string = 'S U C C E S S';
-				this.btnNext.opacity = 255;
-				this.btnNextLable.opacity = 255;
-				this.btnNextComp.interactable = true;
+				this.btnNext.opacity = opa;
+				this.btnNextLable.opacity = opa;
+				this.btnNextComp.interactable = flag;
     			break;
     		case 'failed':
 				this.titleL.string = 'F A I L E D';
-				this.btnNext.opacity = 100;
-				this.btnNextLable.opacity = 100;
-				this.btnNextComp.interactable = false;
+				this.btnNext.opacity = opa;
+				this.btnNextLable.opacity = opa;
+				this.btnNextComp.interactable = flag;
     			break;
 			case 'close':
 				this.titleL.string = 'R E T U R N';
-				this.btnNext.opacity = 100;
-				this.btnNextLable.opacity = 100;
-				this.btnNextComp.interactable = false;
+				this.btnNext.opacity = opa;
+				this.btnNextLable.opacity = opa;
+				this.btnNextComp.interactable = flag;
     		default:
     			break;
     	}

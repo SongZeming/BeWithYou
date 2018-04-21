@@ -5,8 +5,7 @@ let define = {};
 define.BWY_RoundInit = {
 	1: {
 		boy: {
-			// pos: cc.p(70, 520),
-			pos: cc.p(160, 260),
+			pos: cc.p(70, 520),
 			dir: -1, //-1-左 1-右
 		},
 		girl: {
@@ -19,15 +18,41 @@ define.BWY_RoundInit = {
 	},
 	2: {
 		boy: {
-			pos: cc.p(80, 580),
+			pos: cc.p(70, 520),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(192, 80),
+			pos: cc.p(180, 90),
 			dir: -1,
 		},
 		isTogetherMove: false,
 		round: 'SECOND ROUND',
+		snow: false,
+	},
+	3: {
+		boy: {
+			pos: cc.p(70, 550),
+			dir: -1,
+		},
+		girl: {
+			pos: cc.p(1250, 550),
+			dir: 1,
+		},
+		isTogetherMove: false,
+		round: 'THIRD ROUND',
+		snow: false,
+	},
+	4: {
+		boy: {
+			pos: cc.p(580, 640),
+			dir: -1,
+		},
+		girl: {
+			pos: cc.p(1185, 300),
+			dir: 1,
+		},
+		isTogetherMove: false,
+		round: 'THIRD ROUND',
 		snow: false,
 	},
 }

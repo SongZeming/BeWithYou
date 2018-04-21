@@ -27,6 +27,16 @@ let utils = {
         }
     },
 
+    getLength: function (obj) {
+        let count = 0;
+        for (let value in obj) {
+            if (obj.hasOwnProperty(value)) {
+                count++;
+            }
+        }
+        return count;
+    },
+
 };
 
 module.exports = utils;
