@@ -64,14 +64,15 @@ cc.Class({
             this.rootN.getChildByName('platforms' + (i + 1)).active = false;
         }
         this.rootN.getChildByName('platforms' + this._curLevel).active = true;
+        this._isTogetherMove = this._curRoundInit.isTogetherMove;
+        this.node.getChildByName('btnExchange').active = !this._isTogetherMove;
+        this.node.getChildByName('btnExchange').active = !this._curRoundInit.girlNoMove;
     },
 
     start() {
         this.missDistance = 36;
         audio.playMusic('beWithYou', 'gameBack.mp3', true);
         this.back.getChildByName('tishi').active = this._curLevel === 1 ? true : false;
-        this._isTogetherMove = this._curRoundInit.isTogetherMove;
-        this.node.getChildByName('btnExchange').active = !this._isTogetherMove;
 
         this.onMoveTouch();
         this.node.getChildByName('btnExchange').on('click', function () {
@@ -137,7 +138,7 @@ cc.Class({
 
     meet(pos) {
         let otherPos = this[this.getTheOtherOne()].getPosition();
-        if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 10) {
+        if (Math.abs(pos.x - otherPos.x) < this.missDistance && Math.abs(pos.y - otherPos.y) < 5) {
             this.pass();
         }
     },
