@@ -10,7 +10,7 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.speed = cc.v2(0, 0);
-        this.maxSpeed = cc.v2(200, 400);
+        this.maxSpeed = cc.v2(200, 2000);
         this.gravity = -1000; //重力
         this.drag = 300; //拖曳
         this.direction = 0;
@@ -141,6 +141,7 @@ cc.Class({
 
         if (other.node.group === 'Death') {
             event.dispatch('bwyHeroDeath', null);
+            this._isUpdate = false;
         }
         
     },
@@ -219,6 +220,10 @@ cc.Class({
         this.preStep.x = this.speed.x * dt;
         this.preStep.y = this.speed.y * dt;
         
+        if (this.speed.y * dt < -13) {
+            event.dispatch('bwyHeroDeath', null);
+            this._isUpdate = false;
+        }
         this.node.x += this.speed.x * dt;
         this.node.y += this.speed.y * dt;
     },

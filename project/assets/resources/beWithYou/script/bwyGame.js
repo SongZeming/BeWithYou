@@ -112,9 +112,13 @@ cc.Class({
             this.setAnimtion(this._curMoveOne, true);
         }
         let body = this[this._curMoveOne];
-        let pos = body.getPosition();
         body.getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 : -1);
-        this.meet(pos);
+        if (this._isTogetherMove) {
+            let body2 = this.getTheOtherOne();
+            let dir = this._curRoundInit.isSameMoveDirection ? -1 : 1;
+            this[body2].getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 * dir : -1 * dir);
+        }
+        this.meet(body.getPosition());
     },
 
     getTheOtherOne() {
@@ -180,7 +184,7 @@ cc.Class({
         let totalLev = utils.getLength(define.BWY_RoundInit);
         switch(type) {
             case 'success':
-                if (totalLev > saveLev) return true;
+                if (totalLev > saveLev || (totalLev === saveLev && this._curLevel < saveLev)) return true;
                 else return false;
                 break;
             case 'failed':
@@ -229,13 +233,21 @@ cc.Class({
     death() {
         this.setSnowActive(false);
         this._isUpdate = false;
-        this.account('failed', this.checkLevel('failed'));
+        let jump = cc.jumpBy(0.5, cc.p(0, 0), 40, 1);
+        let body = this[this._curMoveOne];
+        let move = cc.moveTo(0.5, cc.p(body.getPositionX(), 0));
+        body.runAction(cc.sequence(jump, move, cc.callFunc(function() {
+            this.account('failed', this.checkLevel('failed'));
+        }.bind(this))));
     },
 
     account(type, flag) {
-        let account = cc.instantiate(this.accountPrefab);
-        account.parent = this.tipsManager;
-        account.getComponent('bwyAccountPrefab').init(type, flag, this);
+        if (this._account) {
+            this._account.removeFromParent();
+        }
+        this._account = cc.instantiate(this.accountPrefab);
+        this._account.parent = this.tipsManager;
+        this._account.getComponent('bwyAccountPrefab').init(type, flag, this);
     },
 
     reStart() {
