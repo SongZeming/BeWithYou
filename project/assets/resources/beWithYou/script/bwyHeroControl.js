@@ -49,12 +49,12 @@ cc.Class({
 
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
     onDisable: function () {
         cc.director.getCollisionManager().enabled = false;
-        cc.director.getCollisionManager().enabledDebugDraw = false;
+        // cc.director.getCollisionManager().enabledDebugDraw = false;
     },
     
     onKeyPressed: function (keyCode, event) {
