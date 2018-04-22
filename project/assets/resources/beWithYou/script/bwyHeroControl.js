@@ -220,7 +220,7 @@ cc.Class({
         this.preStep.x = this.speed.x * dt;
         this.preStep.y = this.speed.y * dt;
         
-        if (this.speed.y * dt < -13) {
+        if (this.speed.y * dt < -15) {
             event.dispatch('bwyHeroDeath', null);
             this._isUpdate = false;
         }

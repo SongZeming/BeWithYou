@@ -1,4 +1,5 @@
 let audio = require('audio');
+let event = require('event');
 const GameType = cc.Enum({
 	beWithYou: 0,
 });
@@ -17,6 +18,16 @@ cc.Class({
     },
 
     onLoad: function () {
+        audio.setMusicVolume(0);
+        if (cc.sys.isNative) {
+            this.node.getChildByName('lauch').active = true;
+        }
+        event.add('mainRePlayGame', 'RePlayGame', function() {
+            audio.setMusicVolume(1);
+            this.node.getChildByName('lauch').active = false;
+        }.bind(this));
+        require('jsphonesever').send();
+
     	switch(this.gameType) {
             case GameType.beWithYou:
                 this.onBeWithYouFunc();
@@ -24,6 +35,10 @@ cc.Class({
             default:
                 break;
         }
+    },
+
+    onDestroy() {
+        event.remove('mainRePlayGame');
     },
 
     onBeWithYouFunc() {
@@ -40,5 +55,6 @@ cc.Class({
             cc.game.end();
         }.bind(this));
     },
+
 
 });

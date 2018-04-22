@@ -113,11 +113,11 @@ cc.Class({
             this.setAnimtion(this._curMoveOne, true);
         }
         let body = this[this._curMoveOne];
-        body.getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 : -1);
+        body.getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 : (this._speed < 0 ? -1 : 0));
         if (this._isTogetherMove) {
             let body2 = this.getTheOtherOne();
-            let dir = this._curRoundInit.isSameMoveDirection ? -1 : 1;
-            this[body2].getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 * dir : -1 * dir);
+            let dir2 = this._curRoundInit.isSameMoveDirection ? -1 : 1;
+            this[body2].getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 * dir2 : -1 * dir2);
         }
         this.meet(body.getPosition());
     },

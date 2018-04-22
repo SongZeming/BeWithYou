@@ -1,4 +1,5 @@
 let audio = require('audio');
+let event = require('event');
 cc.Class({
     extends: cc.Component,
 
@@ -11,6 +12,7 @@ cc.Class({
 
     onLoad () {
     	this.node.getChildByName('btnReturn').on('click', function() {
+    		event.dispatch('RePlayGame', {});
 			audio.playSound('common', 'sound_anniu.mp3');
     		cc.director.loadScene('bwyMain');
     	});
