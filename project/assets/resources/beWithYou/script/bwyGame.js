@@ -166,7 +166,7 @@ cc.Class({
         if (loc.x - this._loc.x < 0) {
             this.startMoveLfet = true;
             this.startMoveRight = false;
-        } else {
+        } else if (loc.x - this._loc.x > 0) {
             this.startMoveRight = true;
             this.startMoveLfet = false;
         }
