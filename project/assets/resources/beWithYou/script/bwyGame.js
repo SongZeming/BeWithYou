@@ -20,8 +20,8 @@ cc.Class({
     onLoad: function () {
         utils.scaleAnimtion('in', this.node);
         this._curLevel = utils.getLocalStorage('chooseLevel') || 1;
-        this.setBackground();
         this.initData();
+        this.setBackground();
         event.add('BwyGameIsJumping', 'HeroIsJumping', function(jump) {
             this._isJumped = jump;
         }.bind(this));
@@ -70,6 +70,16 @@ cc.Class({
         this._isTogetherMove = this._curRoundInit.isTogetherMove;
         this.node.getChildByName('btnExchange').active = !this._isTogetherMove;
         this.node.getChildByName('btnExchange').active = !this._curRoundInit.girlNoMove;
+        setTimeout(() => {
+            this.directorFunc(this.boy);
+        }, 0.2);
+    },
+
+    directorFunc(p) {
+        let dx = p.x < 375 ? 0 : (p.x > 1633 ? -1258 : 357 - p.x);
+        this.backImg.x = dx;
+        this.rootN.x = dx;
+        cc.log(p.x, this.backImg.x, this.rootN.x);
     },
 
     start() {
@@ -81,9 +91,7 @@ cc.Class({
         this.node.getChildByName('btnExchange').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
             this._curMoveOne = this.getTheOtherOne();
-            let one = this[this._curMoveOne];
-            this.backImg.x = one.x < 375 ? 0 : (one.x > 1633 ? 2008 : 357 - one.x);
-            this.rootN.x = this.backImg.x;
+            this.directorFunc(this[this._curMoveOne]);
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');

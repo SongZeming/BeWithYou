@@ -20,12 +20,12 @@ define.BWY_RoundInit = {
 	},
 	2: {
 		boy: {
-			pos: cc.p(70, 520),
+			pos: cc.p(140, 960),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(180, 90),
-			dir: -1,
+			pos: cc.p(600, 160),
+			dir: 1,
 		},
 		isTogetherMove: false,
 		isSameMoveDirection: false,
@@ -35,11 +35,11 @@ define.BWY_RoundInit = {
 	},
 	3: {
 		boy: {
-			pos: cc.p(70, 550),
+			pos: cc.p(90, 960),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(1250, 550),
+			pos: cc.p(1880, 960),
 			dir: 1,
 		},
 		isTogetherMove: false,
@@ -50,11 +50,11 @@ define.BWY_RoundInit = {
 	},
 	4: {
 		boy: {
-			pos: cc.p(580, 640),
+			pos: cc.p(860, 1150),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(1185, 300),
+			pos: cc.p(1880, 540),
 			dir: 1,
 		},
 		isTogetherMove: false,

@@ -14,7 +14,7 @@ cc.Class({
         this.gravity = -1000; //重力
         this.drag = 300; //拖曳
         this.direction = 0;
-        this.jumpSpeed = 500;
+        this.jumpSpeed = 400;
 
         //add keyboard input listener to call turnLeft and turnRight
         cc.eventManager.addListener({
@@ -234,6 +234,9 @@ cc.Class({
             this.node.x += this.speed.x * dt;
         }
         this.node.y += this.speed.y * dt;
+        if ((this.node.x < 375 && this.speed.x > 0) || (this.node.x > 1633 && this.speed.x < 0)) {
+            return;
+        }
         if ((this._backImg.x <= 0 && this.speed.x < 0) 
             || (this._backImg.x + this._backImg.getContentSize().width >= 750 && this.speed.x > 0)) {
             this._rootN.x -= this.speed.x * dt;
