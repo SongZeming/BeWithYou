@@ -27,7 +27,7 @@ cc.Class({
         var node = this.node;
         var type = this.type;
 
-        var width = cc.winSize.width;
+        var width = 2008 || cc.winSize.width;
         var height = cc.winSize.height;
 
         var wallWidth = this.width;

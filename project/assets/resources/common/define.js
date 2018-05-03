@@ -5,11 +5,11 @@ let define = {};
 define.BWY_RoundInit = {
 	1: {
 		boy: {
-			pos: cc.p(70, 520),
+			pos: cc.p(100, 960),
 			dir: -1, //-1-左 1-右
 		},
 		girl: {
-			pos: cc.p(80, 260),
+			pos: cc.p(120, 500),
 			dir: -1,
 		},
 		isTogetherMove: false,

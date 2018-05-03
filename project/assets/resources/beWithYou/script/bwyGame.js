@@ -8,6 +8,7 @@ cc.Class({
 
     properties: {
         back: cc.Node,
+        backImg: cc.Node,
         tipsManager: cc.Node,
         meetImg: cc.Node,
         accountPrefab: cc.Prefab,
@@ -16,7 +17,7 @@ cc.Class({
         rootN: cc.Node,
     },
 
-    onLoad: function () {this.missDistance = 36;
+    onLoad: function () {
         utils.scaleAnimtion('in', this.node);
         this._curLevel = utils.getLocalStorage('chooseLevel') || 1;
         this.setBackground();
@@ -39,6 +40,8 @@ cc.Class({
         this.boy.parent = this.rootN;
         this.girl = cc.instantiate(this.girlPrefab);
         this.girl.parent = this.rootN;
+        this.boy.getComponent('bwyHeroControl').setGameContext(this);
+        this.girl.getComponent('bwyHeroControl').setGameContext(this);
     },
 
     initData() {
@@ -78,6 +81,9 @@ cc.Class({
         this.node.getChildByName('btnExchange').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
             this._curMoveOne = this.getTheOtherOne();
+            let one = this[this._curMoveOne];
+            this.backImg.x = one.x < 375 ? 0 : (one.x > 1633 ? 2008 : 357 - one.x);
+            this.rootN.x = this.backImg.x;
         }.bind(this));
         this.node.getChildByName('btnJump').on('click', function () {
             audio.playSound('common', 'sound_anniu.mp3');
@@ -113,7 +119,8 @@ cc.Class({
             this.setAnimtion(this._curMoveOne, true);
         }
         let body = this[this._curMoveOne];
-        body.getComponent('bwyHeroControl').setDirection(this._speed > 0 ? 1 : (this._speed < 0 ? -1 : 0));
+        let direction = this._speed > 0 ? 1 : (this._speed < 0 ? -1 : 0);
+        body.getComponent('bwyHeroControl').setDirection(direction);
         if (this._isTogetherMove) {
             let body2 = this.getTheOtherOne();
             let dir2 = this._curRoundInit.isSameMoveDirection ? -1 : 1;
@@ -267,12 +274,12 @@ cc.Class({
 
     setBackground() {
         let backName = 'beWithYou/texture/background/gamebg' + (this._curLevel - 1);
-        cc.loader.loadRes(backName, cc.SpriteFrame, function (err, spriteFrame) {
+        cc.loader.loadRes(backName, cc.SpriteFrame, function (err, frame) {
             if (err) {
                 cc.error(err.message || err);
                 return;
             }
-            this.back.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+            this.backImg.getComponent(cc.Sprite).spriteFrame = frame;
         }.bind(this));
     },
 

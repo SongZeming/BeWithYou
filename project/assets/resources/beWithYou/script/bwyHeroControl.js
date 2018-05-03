@@ -10,11 +10,11 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.speed = cc.v2(0, 0);
-        this.maxSpeed = cc.v2(200, 2000);
+        this.maxSpeed = cc.v2(300, 2000);
         this.gravity = -1000; //重力
         this.drag = 300; //拖曳
         this.direction = 0;
-        this.jumpSpeed = 400;
+        this.jumpSpeed = 500;
 
         //add keyboard input listener to call turnLeft and turnRight
         cc.eventManager.addListener({
@@ -30,6 +30,11 @@ cc.Class({
         this.preStep = cc.v2();
 
         this.touchingNumber = 0;
+    },
+
+    setGameContext(context) {
+        this._rootN = context.rootN;
+        this._backImg = context.backImg;
     },
 
     setDirection: function (dir) {
@@ -49,12 +54,12 @@ cc.Class({
 
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
-        // cc.director.getCollisionManager().enabledDebugDraw = true;
+        cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
     onDisable: function () {
         cc.director.getCollisionManager().enabled = false;
-        // cc.director.getCollisionManager().enabledDebugDraw = false;
+        cc.director.getCollisionManager().enabledDebugDraw = false;
     },
     
     onKeyPressed: function (keyCode, event) {
@@ -220,11 +225,19 @@ cc.Class({
         this.preStep.x = this.speed.x * dt;
         this.preStep.y = this.speed.y * dt;
         
-        if (this.speed.y * dt < -15) {
+        if (this.speed.y * dt < -25) {
+            cc.log('--- this.speed.y * dt: ', this.speed.y * dt);
             event.dispatch('bwyHeroDeath', null);
             this._isUpdate = false;
         }
-        this.node.x += this.speed.x * dt;
+        if (this.node.x > 10 || this.node.x < 740) {
+            this.node.x += this.speed.x * dt;
+        }
         this.node.y += this.speed.y * dt;
+        if ((this._backImg.x <= 0 && this.speed.x < 0) 
+            || (this._backImg.x + this._backImg.getContentSize().width >= 750 && this.speed.x > 0)) {
+            this._rootN.x -= this.speed.x * dt;
+            this._backImg.x -= this.speed.x * dt;
+        }
     },
 });
