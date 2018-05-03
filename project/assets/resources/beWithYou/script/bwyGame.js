@@ -79,7 +79,6 @@ cc.Class({
         let dx = p.x < 375 ? 0 : (p.x > 1633 ? -1258 : 357 - p.x);
         this.backImg.x = dx;
         this.rootN.x = dx;
-        cc.log(p.x, this.backImg.x, this.rootN.x);
     },
 
     start() {

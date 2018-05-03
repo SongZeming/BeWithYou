@@ -10,11 +10,11 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         this.speed = cc.v2(0, 0);
-        this.maxSpeed = cc.v2(300, 2000);
+        this.maxSpeed = cc.v2(300, 3000);
         this.gravity = -1000; //重力
         this.drag = 300; //拖曳
         this.direction = 0;
-        this.jumpSpeed = 400;
+        this.jumpSpeed = 450;
 
         //add keyboard input listener to call turnLeft and turnRight
         cc.eventManager.addListener({
@@ -225,6 +225,7 @@ cc.Class({
         this.preStep.x = this.speed.x * dt;
         this.preStep.y = this.speed.y * dt;
         
+        cc.log('--- this.speed.y * dt: ', this.speed.y * dt);
         if (this.speed.y * dt < -25) {
             cc.log('--- this.speed.y * dt: ', this.speed.y * dt);
             event.dispatch('bwyHeroDeath', null);

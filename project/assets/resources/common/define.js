@@ -65,11 +65,11 @@ define.BWY_RoundInit = {
 	},
 	5: {
 		boy: {
-			pos: cc.p(290, 630),
+			pos: cc.p(450, 1140),
 			dir: 1,
 		},
 		girl: {
-			pos: cc.p(600, 175),
+			pos: cc.p(420, 350),
 			dir: 1,
 		},
 		isTogetherMove: false,
