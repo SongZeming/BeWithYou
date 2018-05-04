@@ -54,12 +54,12 @@ cc.Class({
 
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
     },
 
     onDisable: function () {
         cc.director.getCollisionManager().enabled = false;
-        cc.director.getCollisionManager().enabledDebugDraw = false;
+        // cc.director.getCollisionManager().enabledDebugDraw = false;
     },
     
     onKeyPressed: function (keyCode, event) {
@@ -225,8 +225,7 @@ cc.Class({
         this.preStep.x = this.speed.x * dt;
         this.preStep.y = this.speed.y * dt;
         
-        cc.log('--- this.speed.y * dt: ', this.speed.y * dt);
-        if (this.speed.y * dt < -25) {
+        if (this.speed.y * dt < -20) {
             cc.log('--- this.speed.y * dt: ', this.speed.y * dt);
             event.dispatch('bwyHeroDeath', null);
             this._isUpdate = false;

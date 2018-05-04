@@ -14,8 +14,8 @@
   "optimizeHotUpdate": false,
   "orientation": {
     "landscapeLeft": false,
-    "landscapeRight": true,
-    "portrait": false,
+    "landscapeRight": false,
+    "portrait": true,
     "upsideDown": false
   },
   "packageName": "org.cocos2d.helloworld",

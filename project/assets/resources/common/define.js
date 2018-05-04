@@ -80,11 +80,11 @@ define.BWY_RoundInit = {
 	},
 	6: {
 		boy: {
-			pos: cc.p(700, 630),
+			pos: cc.p(1000, 1120),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(100, 430),
+			pos: cc.p(100, 750),
 			dir: -1,
 		},
 		isTogetherMove: false,
@@ -95,11 +95,11 @@ define.BWY_RoundInit = {
 	},
 	7: {
 		boy: {
-			pos: cc.p(286, 610),
+			pos: cc.p(80, 1070),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(90, 300),
+			pos: cc.p(150, 500),
 			dir: -1,
 		},
 		isTogetherMove: false,
@@ -110,15 +110,15 @@ define.BWY_RoundInit = {
 	},
 	8: {
 		boy: {
-			pos: cc.p(90, 700),
+			pos: cc.p(90, 1240),
 			dir: -1,
 		},
 		girl: {
-			pos: cc.p(1200, 700),
+			pos: cc.p(1900, 1240),
 			dir: -1,
 		},
-		isTogetherMove: true,
-		isSameMoveDirection: true,
+		isTogetherMove: false,
+		isSameMoveDirection: false,
 		girlNoMove: false,
 		round: 'EIGHT ROUND',
 		snow: false,

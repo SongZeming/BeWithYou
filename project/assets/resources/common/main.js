@@ -52,6 +52,7 @@ cc.Class({
             cc.instantiate(this.setPrefab).parent = this.node;
         }.bind(this));
         this.node.getChildByName('btnQuit').on('click', function() {
+            cc.audioEngine.stopAll();
             cc.game.end();
         }.bind(this));
     },
